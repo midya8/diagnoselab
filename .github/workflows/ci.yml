@@ -20,6 +20,9 @@ jobs:
           PYTHONPATH=. python tools/build_audits.py
           cmp docs/audits.json /tmp/audits.json
           cmp examples/demo.json /tmp/demo.json
+          cp docs/consequences-audits.json /tmp/consequences.json
+          PYTHONPATH=. python tools/build_consequences.py
+          cmp docs/consequences-audits.json /tmp/consequences.json
   browser-and-wheel:
     runs-on: ubuntu-latest
     steps:
