@@ -1,0 +1,33 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.10', '3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest discover -s tests -v
+      - run: |
+          cp docs/audits.json /tmp/audits.json
+          cp examples/demo.json /tmp/demo.json
+          PYTHONPATH=. python tools/build_audits.py
+          cmp docs/audits.json /tmp/audits.json
+          cmp examples/demo.json /tmp/demo.json
+  browser-and-wheel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: browser-actions/setup-chrome@v1
+      - run: npm test
+      - uses: astral-sh/setup-uv@v6
+      - run: sh tools/wheel_smoke.sh
