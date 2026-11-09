@@ -9,7 +9,7 @@ from diagnoselab import audit
 rows = json.loads(Path(sys.argv[1]).read_text())
 checkout = Path(sys.argv[2]).resolve()
 origins = {}
-for name in ['diagnoselab', 'diagnoselab.core', 'diagnoselab.cli', 'diagnoselab.__main__']:
+for name in ['diagnoselab', 'diagnoselab.core', 'diagnoselab.cli', 'diagnoselab.__main__', 'diagnoselab.consequences']:
     if name.endswith('__main__'):
         origin = importlib.util.find_spec(name).origin
     else:
@@ -19,3 +19,9 @@ for name in ['diagnoselab', 'diagnoselab.core', 'diagnoselab.cli', 'diagnoselab.
 for row in rows:
     assert audit(row['input']) == row['report'], row['name']
 print(json.dumps({'reports': len(rows), 'module_origins': origins}))
+
+from diagnoselab.consequences import consequences
+query_rows=json.loads(Path(sys.argv[3]).read_text())
+for row in query_rows:
+    assert consequences(row['input'],row['query'])==row['report'],row['name']
+print(json.dumps({'consequence_reports':len(query_rows)}))
