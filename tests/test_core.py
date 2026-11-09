@@ -26,8 +26,9 @@ def powers(m):
     return [set(i for i in range(m) if mask & 2**i) for mask in range(2**m)]
 
 
-def check_trace(test, p, row):
-    clauses = [('h'+str(i), c) for i, c in enumerate(p['hard'])] + [('s'+str(i), p['soft'][i]['clause']) for i in row['kept']]
+def check_trace(test, p, row, clauses=None):
+    if clauses is None:
+        clauses = [('h'+str(i), c) for i, c in enumerate(p['hard'])] + [('s'+str(i), p['soft'][i]['clause']) for i in row['kept']]
     trace = row['dpll']['trace']
     seen = set()
     def active(a):
