@@ -38,3 +38,15 @@ The package and command line need Python 3.10+ and no runtime dependencies. Node
 At most six Boolean variables, eight hard clauses and eight removable clauses; at most 12 literal occurrences per clause. All subsets and assignments are enumerated. This is established DPLL and MUS/MCS theory, not a novel or scalable SAT/MaxSAT solver. No clause learning, external solver, performance benchmark, learned fault diagnosis, physical causal inference, DRAT/LRAT proof export or machine-checked correctness claim. Costs are supplied removal preferences, not probabilities. Restoring consistency is not evidence that the supplied clauses are true or that a real action is safe.
 
 Native JSON and browser JSON.parse differ on duplicate keys, UTF-8 bytes versus characters and lexical float integer tokens; see the method. Original implementation, independent checks and synthetic controls: Midya Rahmani. Theory is attributed below; no external solver code or data is copied.
+
+## Repair-policy consequences
+
+[Consequence inspector](https://midya8.github.io/diagnoselab/consequences.html) · [Consequence method/sources](CONSEQUENCES.md)
+
+Ask whether one query clause is true in every versus some model, under every versus some selected repair. Compare all-minimal, minimum-cost and minimum-cardinality families with all ties retained. Full countermodels and negated-query DPLL traces check entailment; a shared-clause intersection baseline is kept distinct. Strict controls separate quantifiers and show policy reversal. Empty repair families are inapplicable, not vacuous certainty.
+
+This extension brings the total to 24 Python test functions and eight Node/Chrome tests while retaining the original tests above. 26 complete consequence reports compare on 16,165 exact scalar leaves: 67 repairs, 78 policy records and 151 negated-query nodes including intersection baselines. Actual Chrome verifies 78 complete policy records, 67 repairs, 70 selected per-repair nodes, 462 literal rows, all tables, export and stale/invalid clearing. The installed wheel reproduces all 18 base and 26 consequence reports outside the checkout with five module origins. No database/description-logic engine, probabilities or real-world truth claim.
+
+```sh
+python -m diagnoselab.consequences examples/demo.json --query '[1]' --output /tmp/consequences.json
+```
