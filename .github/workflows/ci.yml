@@ -31,6 +31,9 @@ jobs:
         with:
           node-version: '22'
       - uses: browser-actions/setup-chrome@v1
+        id: chrome
       - run: npm test
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
       - uses: astral-sh/setup-uv@v6
       - run: sh tools/wheel_smoke.sh
