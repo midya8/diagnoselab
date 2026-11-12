@@ -1,8 +1,11 @@
-# Diagnoselab: all conflicts, all minimal repairs
+# Diagnoselab
 
-[Live inspector](https://midya8.github.io/diagnoselab/) · [Method and sources](METHOD.md)
+Diagnoselab finds which removable clauses restore consistency to a small propositional formula. Supply fixed hard CNF clauses, removable soft clauses and positive rational removal costs. It lists every relative minimal unsatisfiable subset (MUS), every minimal correction set (MCS), their hitting-set relationship and the DPLL search for every soft subset. A separate exhaustive truth table checks each result.
 
-Exact tiny propositional consistency analysis, built from first principles in dependency-free Python and independent BigInt JavaScript. Supply fixed hard CNF clauses and removable soft clauses with positive rational costs. Inspect every relative minimal unsatisfiable subset (MUS), every minimal correction set (MCS), the complete hitting-set duality table and every DPLL search node. Every subset is checked against a separate exhaustive truth table.
+- [Consistency inspector](https://midya8.github.io/diagnoselab/): inspect conflicts, minimal repairs, costs and search traces. See [METHOD.md](METHOD.md).
+- [Consequence inspector](https://midya8.github.io/diagnoselab/consequences.html): ask whether a query clause holds under every or some model of every or some selected repair. See [CONSEQUENCES.md](CONSEQUENCES.md).
+
+Python and independent BigInt JavaScript implementations use exact arithmetic and have no runtime dependencies.
 
 The default control has two repairs: remove one clause at cost 5, or two clauses at total cost 2. Both are inclusion-minimal. The smallest repair is not the cheapest repair. Another retained control has disjoint cores: repairing only one does not repair the formula. Forward/reverse deletion can find different-sized minimal cores. An inconsistent hard background has no soft repair, represented explicitly by the empty relative core.
 
@@ -14,6 +17,7 @@ diagnoselab examples/demo.json --output /tmp/report.json
 python -m diagnoselab examples/demo.json
 python -m unittest discover -s tests -v
 PYTHONPATH=. python tools/build_audits.py
+PYTHONPATH=. python tools/build_consequences.py
 npm test
 sh tools/wheel_smoke.sh
 python -m http.server 8000 --directory docs
@@ -21,7 +25,7 @@ python -m http.server 8000 --directory docs
 
 The package and command line need Python 3.10+ and no runtime dependencies. Node 22+ and Chrome are needed for browser tests; uv is used only for the isolated installed-wheel check. The demo is static and computes edits locally after loading the original controls. No paid service, model API or external dataset.
 
-## Audit surface
+## What the consistency inspector shows
 
 - All 2^m soft subsets, complete truth-table model lists and exact removal costs.
 - Complete deterministic DPLL/unit-propagation trace for every subset: initial/final partial assignments, reason clause for each forced literal, residual clauses, satisfied clause IDs, false/true branches, conflict clause and returned model.
@@ -31,7 +35,7 @@ The package and command line need Python 3.10+ and no runtime dependencies. Node
 - All minimum-cardinality and minimum-cost repairs, exact rational ties and two complete deletion-order runs.
 - Original/normalized clause literals and separate duplicate identities; empty/tautological clauses and fixed-background failures stay explicit.
 
-17 Python tests on 3.10-3.13 include 180 independent powerset family controls, 80 complete-trace control systems, literal/variable/cost/permutation controls, all retained minimality/unique-hit witnesses, parser/no-mutation checks and CLI output preservation. These control counts are not test-function counts. Four Node/Chrome tests compare 18 complete native/BigInt reports on 74,292 exact scalar leaves and check 90 further independent truth-mask systems. Actual Chrome checks all 827 subset outcomes, 1,301 full search-node records, 20 cores, 52 repairs, 304 truth rows, every rendered family/duality/subset table, stale/invalid clearing, export and 320/390/1280 containment. The wheel check reproduces all 18 reports outside the checkout, verifies four module origins and compares installed console/module CLIs.
+The original consistency workflow has 17 Python tests, retained in the current suite of 24. The CI matrix covers Python 3.10-3.13. These tests include 180 independent powerset family controls, 80 complete-trace control systems, literal/variable/cost/permutation controls, all retained minimality/unique-hit witnesses, parser/no-mutation checks and CLI output preservation. These control counts are not test-function counts. Four original Node/Chrome tests, retained in the current suite of eight, compare 18 complete native/BigInt reports on 74,292 exact scalar leaves and check 90 further independent truth-mask systems. Actual Chrome checks all 827 subset outcomes, 1,301 full search-node records, 20 cores, 52 repairs, 304 truth rows, every rendered family/duality/subset table, stale/invalid clearing, export and 320/390/1280 containment. The wheel check reproduces all 18 consistency reports outside the checkout, checks the four original module origins and compares installed console/module CLIs. It also checks the consequence extension described below, for five module origins in total.
 
 ## Boundaries
 
